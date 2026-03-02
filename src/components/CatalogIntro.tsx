@@ -5,29 +5,30 @@ import Image from "next/image";
 
 const DURATION_MS = 3500;
 
-export function CatalogIntro() {
-  const [mounted, setMounted] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [exiting, setExiting] = useState(false);
+type Props = {
+  onClose?: () => void;
+};
 
-  useEffect(() => {
-    setMounted(true);
-    setVisible(true);
-  }, []);
+export function CatalogIntro({ onClose }: Props) {
+  const [visible, setVisible] = useState(true);
+  const [exiting, setExiting] = useState(false);
 
   function close() {
     if (!visible || exiting) return;
     setExiting(true);
-    setTimeout(() => setVisible(false), 400);
+    setTimeout(() => {
+      setVisible(false);
+      onClose?.();
+    }, 400);
   }
 
   useEffect(() => {
-    if (!visible || !mounted || exiting) return;
+    if (!visible || exiting) return;
     const t = setTimeout(close, DURATION_MS);
     return () => clearTimeout(t);
-  }, [visible, mounted, exiting]);
+  }, [visible, exiting]);
 
-  if (!mounted || !visible) return null;
+  if (!visible) return null;
 
   return (
     <button
@@ -38,10 +39,15 @@ export function CatalogIntro() {
       aria-label="Cerrar y ver catálogo"
     >
       <div
-        className={`absolute inset-0 w-full h-full transition-opacity duration-500 animate-catalog-intro ${
+        className={`absolute inset-0 w-full h-full animate-catalog-intro ${
           exiting ? "opacity-0" : "opacity-100"
         }`}
-        style={{ height: "100dvh" }}
+        style={{
+          height: "100dvh",
+          willChange: "transform, opacity",
+          transform: "translateZ(0)",
+          transition: exiting ? "opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1)" : "none",
+        }}
       >
         <Image
           src="/catalog-intro.png"

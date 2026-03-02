@@ -9,6 +9,29 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      categories: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          slug: string;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          slug?: string;
+          sort_order?: number;
+          created_at?: string;
+        };
+      };
       products: {
         Row: {
           id: string;
@@ -16,7 +39,7 @@ export interface Database {
           description: string | null;
           price_guaranies: number;
           image_url: string | null;
-          category: "pañoletas" | "accesorios";
+          category: string;
           dimensions: string | null;
           variants: string | null;
           active: boolean;
@@ -30,7 +53,7 @@ export interface Database {
           description?: string | null;
           price_guaranies: number;
           image_url?: string | null;
-          category: "pañoletas" | "accesorios";
+          category: string;
           dimensions?: string | null;
           variants?: string | null;
           active?: boolean;
@@ -44,7 +67,7 @@ export interface Database {
           description?: string | null;
           price_guaranies?: number;
           image_url?: string | null;
-          category?: "pañoletas" | "accesorios";
+          category?: string;
           dimensions?: string | null;
           variants?: string | null;
           active?: boolean;
@@ -74,6 +97,9 @@ export interface Database {
   };
 }
 
+export type Category = Database["public"]["Tables"]["categories"]["Row"];
+export type CategoryInsert = Database["public"]["Tables"]["categories"]["Insert"];
+export type CategoryUpdate = Database["public"]["Tables"]["categories"]["Update"];
 export type Product = Database["public"]["Tables"]["products"]["Row"];
 export type ProductInsert = Database["public"]["Tables"]["products"]["Insert"];
 export type ProductUpdate = Database["public"]["Tables"]["products"]["Update"];

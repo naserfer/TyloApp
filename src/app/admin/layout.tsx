@@ -78,6 +78,9 @@ export default function AdminLayout({
             <Link href="/admin/productos" className="text-tylo-text hover:underline">
               Productos
             </Link>
+            <Link href="/admin/categorias" className="text-tylo-text hover:underline">
+              Categorías
+            </Link>
             <Link href="/admin/config" className="text-tylo-text hover:underline">
               Config
             </Link>

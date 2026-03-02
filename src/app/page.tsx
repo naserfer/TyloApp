@@ -1,23 +1,29 @@
 import { getSupabase } from "@/lib/supabase/client";
-import { CatalogSection } from "@/components/CatalogSection";
+import { CatalogWithTabs } from "@/components/CatalogWithTabs";
 import type { Product } from "@/types/database";
+import type { Category } from "@/types/database";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
   let products: Product[] | null = null;
+  let categories: Category[] | null = null;
   let loadError: string | null = null;
 
   try {
     const supabase = getSupabase();
-    const { data, error } = await supabase
-      .from("products")
-      .select("*")
-      .eq("active", true)
-      .order("sort_order", { ascending: true })
-      .order("name", { ascending: true });
-    products = data ?? null;
-    loadError = error?.message ?? null;
+    const [productsRes, categoriesRes] = await Promise.all([
+      supabase
+        .from("products")
+        .select("*")
+        .eq("active", true)
+        .order("sort_order", { ascending: true })
+        .order("name", { ascending: true }),
+      supabase.from("categories").select("*").order("sort_order", { ascending: true }),
+    ]);
+    products = productsRes.data ?? null;
+    categories = categoriesRes.data ?? null;
+    loadError = productsRes.error?.message ?? categoriesRes.error?.message ?? null;
   } catch (e) {
     loadError = e instanceof Error ? e.message : "Error al conectar";
   }
@@ -30,23 +36,10 @@ export default async function HomePage() {
     );
   }
 
-  const pañoletas = (products ?? []).filter((p) => p.category === "pañoletas");
-  const accesorios = (products ?? []).filter((p) => p.category === "accesorios");
-
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
-      <p className="text-center text-tylo-teal/90 text-sm mb-8 animate-page-fade opacity-0 [animation-fill-mode:forwards]">
-        Elegí lo que te guste y enviá tu pedido directo por WhatsApp.
-      </p>
-
-      <CatalogSection title="Pañoletas" products={pañoletas} />
-      <CatalogSection title="Accesorios" products={accesorios} />
-
-      {(!products || products.length === 0) && (
-        <p className="text-center text-tylo-teal/70 py-12 animate-page-fade opacity-0 [animation-fill-mode:forwards]">
-          Pronto vas a ver los productos acá.
-        </p>
-      )}
-    </div>
+    <CatalogWithTabs
+      categories={categories ?? []}
+      products={products ?? []}
+    />
   );
 }

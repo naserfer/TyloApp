@@ -6,12 +6,14 @@ import Link from "next/link";
 import { getSupabase } from "@/lib/supabase/client";
 import { ProductImageUpload } from "@/components/admin/ProductImageUpload";
 import type { Product } from "@/types/database";
+import type { Category } from "@/types/database";
 
 export default function EditarProductoPage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
   const [product, setProduct] = useState<Product | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
@@ -21,11 +23,19 @@ export default function EditarProductoPage() {
     description: "",
     price_guaranies: "",
     image_url: "",
-    category: "pañoletas" as "pañoletas" | "accesorios",
+    category: "",
     dimensions: "",
     variants: "",
     active: true,
   });
+
+  useEffect(() => {
+    getSupabase()
+      .from("categories")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .then(({ data }) => setCategories((data as Category[]) ?? []));
+  }, []);
 
   useEffect(() => {
     const supabase = getSupabase();
@@ -125,16 +135,16 @@ export default function EditarProductoPage() {
           </label>
           <select
             value={form.category}
-            onChange={(e) =>
-              setForm((f) => ({
-                ...f,
-                category: e.target.value as "pañoletas" | "accesorios",
-              }))
-            }
+            onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
             className="w-full px-3 py-2 rounded-lg border border-tylo-teal/20 bg-white"
+            required
           >
-            <option value="pañoletas">Pañoletas</option>
-            <option value="accesorios">Accesorios</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.slug}>{c.name}</option>
+            ))}
+            {form.category && !categories.some((c) => c.slug === form.category) && (
+              <option value={form.category}>{form.category}</option>
+            )}
           </select>
         </div>
         <div>

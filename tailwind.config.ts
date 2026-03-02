@@ -10,8 +10,8 @@ const config: Config = {
     extend: {
       keyframes: {
         "catalog-intro": {
-          "0%": { opacity: "0", transform: "scale(0.96)" },
-          "100%": { opacity: "1", transform: "scale(1)" },
+          "0%": { opacity: "0", transform: "scale(0.98) translateZ(0)" },
+          "100%": { opacity: "1", transform: "scale(1) translateZ(0)" },
         },
         "product-enter": {
           "0%": {
@@ -29,7 +29,7 @@ const config: Config = {
         },
       },
       animation: {
-        "catalog-intro": "catalog-intro 0.7s ease-out forwards",
+        "catalog-intro": "catalog-intro 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards",
         "product-enter": "product-enter 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards",
         "page-fade": "page-fade 0.6s ease-out forwards",
       },

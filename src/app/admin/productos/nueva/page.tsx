@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getSupabase } from "@/lib/supabase/client";
 import { ProductImageUpload } from "@/components/admin/ProductImageUpload";
+import type { Category } from "@/types/database";
 
 export default function NuevaProductoPage() {
   const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
   const [saving, setSaving] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
   const [error, setError] = useState("");
@@ -16,10 +18,22 @@ export default function NuevaProductoPage() {
     description: "",
     price_guaranies: "",
     image_url: "",
-    category: "pañoletas" as "pañoletas" | "accesorios",
+    category: "",
     dimensions: "",
     variants: "",
   });
+
+  useEffect(() => {
+    getSupabase()
+      .from("categories")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .then(({ data }) => {
+        const list = (data as Category[]) ?? [];
+        setCategories(list);
+        if (list.length > 0 && !form.category) setForm((f) => ({ ...f, category: list[0].slug }));
+      });
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,7 +51,7 @@ export default function NuevaProductoPage() {
       description: form.description.trim() || null,
       price_guaranies: price,
       image_url: form.image_url.trim() || null,
-      category: form.category,
+      category: form.category.trim(),
       dimensions: form.dimensions.trim() || null,
       variants: form.variants.trim() || null,
       active: true,
@@ -78,16 +92,14 @@ export default function NuevaProductoPage() {
           </label>
           <select
             value={form.category}
-            onChange={(e) =>
-              setForm((f) => ({
-                ...f,
-                category: e.target.value as "pañoletas" | "accesorios",
-              }))
-            }
+            onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
             className="w-full px-3 py-2 rounded-lg border border-tylo-teal/20 bg-white"
+            required
           >
-            <option value="pañoletas">Pañoletas</option>
-            <option value="accesorios">Accesorios</option>
+            {categories.length === 0 && <option value="">Cargando...</option>}
+            {categories.map((c) => (
+              <option key={c.id} value={c.slug}>{c.name}</option>
+            ))}
           </select>
         </div>
         <div>
