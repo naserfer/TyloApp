@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --tylo-teal: #0d5c5c;
+  --tylo-teal-light: #0f6e6e;
+  --tylo-teal-dark: #094848;
+  --tylo-cream: #faf8f5;
+  --tylo-text: #1a1a1a;
+}
+
+body {
+  @apply bg-tylo-cream text-tylo-text antialiased;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Estilo femenino: suavizar scroll y toques */
+@layer utilities {
+  .touch-manual {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
