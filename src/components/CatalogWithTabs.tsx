@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ProductCard } from "./ProductCard";
+import { useIntro } from "@/context/IntroContext";
 import type { Product } from "@/types/database";
 import type { Category } from "@/types/database";
 
@@ -14,6 +15,7 @@ type Props = {
 
 export function CatalogWithTabs({ categories, products }: Props) {
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const { introClosed } = useIntro();
 
   const filtered =
     selectedSlug === null
@@ -64,7 +66,10 @@ export function CatalogWithTabs({ categories, products }: Props) {
       </nav>
 
       {filtered.length > 0 ? (
-        <section key={selectedSlug ?? "all"} className="mb-10">
+        <section
+          key={`${selectedSlug ?? "all"}-${introClosed ? "visible" : "hidden"}`}
+          className="mb-10"
+        >
           <h2 className="text-lg font-bold text-tylo-text uppercase tracking-wider mb-4 border-l-4 border-tylo-teal pl-3 opacity-0 animate-page-fade [animation-fill-mode:forwards]">
             {selectedName}
           </h2>

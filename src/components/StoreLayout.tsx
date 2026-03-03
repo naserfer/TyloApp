@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Header } from "./Header";
 import { CartBar } from "./CartBar";
 import { CatalogIntro } from "./CatalogIntro";
+import { IntroProvider } from "@/context/IntroContext";
 
 export function StoreLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -23,11 +24,11 @@ export function StoreLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Header />
-      {isCatalogHome && <CatalogIntro onClose={() => setIntroClosed(true)} />}
-      <div key={isCatalogHome && !introClosed ? "intro-visible" : "catalog-visible"}>
+      <IntroProvider value={{ introClosed }}>
+        <Header />
+        {isCatalogHome && <CatalogIntro onClose={() => setIntroClosed(true)} />}
         {children}
-      </div>
+      </IntroProvider>
       <CartBar />
     </>
   );
