@@ -14,7 +14,7 @@ App web para pañoletas y accesorios. Los clientes ven el catálogo, agregan al 
 
 ```bash
 npm install
-cp .env.local.example .env.local
+cp .env.local.example .env.locall
 ```
 
 En `.env.local`:
