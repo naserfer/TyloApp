@@ -70,8 +70,8 @@ export default function AdminLayout({
     <div className="min-h-screen bg-tylo-cream">
       <nav className="bg-white border-b border-tylo-teal/10 px-4 py-3">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <Link href="/admin/productos" className="flex items-center gap-2 shrink-0" aria-label="Tylo Admin - Inicio">
-            <Image src="/tylo-logo.png" alt="" width={40} height={40} className="h-10 w-10 object-contain" unoptimized />
+          <Link href="/admin/productos" className="flex items-center gap-2 shrink-0 rounded-full overflow-hidden" aria-label="Tylo Admin - Inicio">
+            <Image src="/tylo-logo.png" alt="" width={64} height={64} className="h-8 w-8 object-cover" sizes="32px" />
             <span className="font-semibold text-tylo-teal">Admin</span>
           </Link>
           <div className="flex gap-4 text-sm">

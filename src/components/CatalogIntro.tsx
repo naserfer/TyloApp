@@ -34,12 +34,12 @@ export function CatalogIntro({ onClose }: Props) {
     <button
       type="button"
       onClick={close}
-      className="fixed inset-0 z-50 w-full h-full min-h-[100dvh] min-w-[100vw] bg-tylo-cream focus:outline-none focus:ring-2 focus:ring-tylo-teal/30"
+      className="fixed inset-0 z-50 w-full h-full min-h-[100dvh] min-w-[100vw] bg-black focus:outline-none focus:ring-2 focus:ring-tylo-teal/30"
       style={{ height: "100dvh" }}
       aria-label="Cerrar y ver catálogo"
     >
       <div
-        className={`absolute inset-0 w-full h-full animate-catalog-intro ${
+        className={`absolute inset-0 w-full h-full flex items-center justify-center animate-catalog-intro ${
           exiting ? "opacity-0" : "opacity-100"
         }`}
         style={{
@@ -59,7 +59,7 @@ export function CatalogIntro({ onClose }: Props) {
           unoptimized
         />
       </div>
-      <p className="absolute bottom-8 left-4 right-4 text-center text-tylo-teal/70 text-sm drop-shadow-sm">
+      <p className="absolute bottom-8 left-4 right-4 text-center text-lg font-medium text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.8),0_2px_8px_rgba(0,0,0,0.6)] px-4 py-2 rounded-full bg-black/30 backdrop-blur-sm max-w-fit mx-auto">
         Tocá para entrar al catálogo
       </p>
     </button>
